@@ -1,45 +1,39 @@
+# Import this module to generate regex to test word pattern
+import re
+
 # Read contents from a file
 filename = 'poem.txt'
 # Open with filename
 opened_file = open(filename, 'rb')
-
-# print opened_file
 # Iterate through the file line by line and add that to a string
-text = opened_file.read()
 
-opened_file.close()
-# Split the text into a list
-list_of_text = text.split('\n')
+# Use regex to generate pattern to find words
+word_pattern = re.compile('\w+')
 
-
+# Use regex findall method to generate list of words from the string output by read() method
+words = word_pattern.findall(opened_file.read())
 
 # Use a dictionary to build a string that we will write to report.txt
 word_occurence = {}
 
-
-for line in list_of_text:
-
-    # Does the key exist?
-    line_list = line.split(' ')
-
-    for word in line_list:
-        if word in word_occurence:
-            word_occurence[word] += 1
-        else:
-            word_occurence[word] = 1
+for word in words:
+    if word in word_occurence:
+        word_occurence[word] += 1
+    else:
+        word_occurence[word] = 1
 
 # By here, we've built a working dictionary
 
-# build a string that we will
+# Build a string that we will place into report.txt
 
 output_string = ''
-for key in word_occurence.keys():
-    output_string += "Word: {}, Occurence: {} \n".format(key, word_occurence[key])
+
+# Function to use as parameter when sorting list of tuples. Can also use lambda function.
+def sort_by_second_item_in_tuple(word_pair):
+    return word_pair[1]
+
+for word_tuple in sorted(word_occurence.items(), key = sort_by_second_item_in_tuple, reverse = True):
+    output_string += "'{}' ........ {} \n".format(word_tuple[0], word_tuple[1])
 
 # write to report.txt
-# Read contents from a file
-filename = 'report.txt'
-# Open with filename
-opened_file = open(filename, 'w')
-
-opened_file.write(output_string)
+open('report.txt', 'w').write(output_string)
