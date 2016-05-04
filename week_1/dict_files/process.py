@@ -17,10 +17,11 @@ words = word_pattern.findall(opened_file.read())
 word_occurence = {}
 
 for word in words:
-    if word in word_occurence:
-        word_occurence[word] += 1
+    lowercase_word = word.lower()
+    if lowercase_word in word_occurence:
+        word_occurence[lowercase_word] += 1
     else:
-        word_occurence[word] = 1
+        word_occurence[lowercase_word] = 1
 
 # By here, we've built a working dictionary
 
